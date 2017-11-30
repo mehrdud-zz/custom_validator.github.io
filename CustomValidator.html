@@ -1,0 +1,373 @@
+<html>
+	<head>
+		<title>Customisable Validator</title>
+		<style>
+			div,
+			h1,
+			h2,
+			span,
+			p{
+				padding: 0;
+				margin: 0;
+			}
+
+			bod{
+			padding: 0 10px;
+			}
+			#validationRules,
+			#cleaningRules{
+			   width:100%;  
+			 }
+
+			.validationRuleRow{				
+				padding: 5px 0 5px 0;
+				border-bottom: 1px dashed #eeeeee;	
+			}
+
+			.card { 
+				padding: 10px;
+			}
+			
+			div.outer_container{
+				padding: 0 20px;
+				background-color: #eeeeee;
+			}
+			div.container {
+				padding: 20px;
+				height: 100%;
+				width: 100%;
+				min-width: 
+				display: inline-block;
+				min-height: 800px;
+				background-color: white;
+			}
+		  
+		</style>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+
+		<script type="text/javascript">
+
+		function ValidationFieldNameChange(element, fieldName){
+			var selectedFieldName = $(element).val();
+			
+			var validationRuleSelect = $(element).parent().parent().next().children().children("[name='ValidationRule']");
+			if(selectedFieldName!="") {
+				$(validationRuleSelect).prop( "disabled", false ); 
+				
+				$(element).parent().parent().toggleClass('bg-primary bg-light');
+				$(element).parent().parent().next().toggleClass('bg-light bg-primary');
+			}
+			else {
+				$(validationRuleSelect).val("");
+				$(validationRuleSelect).prop( "disabled", true ); 
+				
+				$(element).parent().parent().toggleClass('bg-light bg-primary');
+				$(element).parent().parent().next().toggleClass('bg-primary bg-light');		
+			}
+		}
+		
+	 function CleaningFieldNameChange(element, fieldName){
+			var selectedFieldName = $(element).val();
+			
+			var validationRuleSelect = $(element).parent().parent().next().children().children("[name='CleaningRule']");
+			if(selectedFieldName!="") {
+				$(validationRuleSelect).prop( "disabled", false ); 
+				
+				$(element).parent().parent().toggleClass('bg-primary bg-light');
+				$(element).parent().parent().next().toggleClass('bg-light bg-primary');
+			}
+			else {
+				$(validationRuleSelect).val("");
+				$(validationRuleSelect).prop( "disabled", true ); 
+				
+				$(element).parent().parent().toggleClass('bg-light bg-primary');
+				$(element).parent().parent().next().toggleClass('bg-primary bg-light');		
+			}
+		}
+		
+
+		function ValidationRuleChange(element){
+		 var selectedValidationRule = $(element).val();
+		 
+		 if(selectedValidationRule!=""){
+			$(element).parent().parent().toggleClass('bg-primary bg-light');
+			$(element).parent().parent().next().toggleClass('bg-light bg-primary');
+		 }
+		 else{
+			$(element).parent().parent().toggleClass('bg-light bg-primary');
+			$(element).parent().parent().next().toggleClass('bg-primary bg-light');
+		 }
+		 
+		 var html = getContent(selectedValidationRule);
+		 console.log(html);
+		 $(element).parent().parent().next().html(html);
+		}
+
+		function removeLine(Element){
+		var removeRow = $(Element);
+		while(!$(removeRow).hasClass("card-deck"))
+		    removeRow = $(removeRow).parent();
+			
+		$(removeRow).remove();
+		console.log(html);
+		}
+		function addNewValidationRule(){
+				
+			var newRue =
+			'<div class="validationRuleRow row card-deck">' +
+
+			'<div class="card text-white bg-primary">'+	
+			'  <div class="card-body"><select name="fieldName" onchange="ValidationFieldNameChange(this);">' +
+			'       <option value="">(select a field)</option>'+
+			'   	<option value="AccountNumber">Account Number</option>' +
+			'   	<option value="BankCode">Bank Code</option>' +
+			'   	<option value="BankCodeType">Bank Code Type</option>' +
+			'   	<option value="BranchCode">Branch Code</option>' +
+			'	   <option value="BranchCodeType">Branch Code Type</option>' +
+			'   </select></div>' + 	
+			'</div>'+
+			'<div class="card text-white bg-light">'+	
+			'   <div class="card-body"><select name="ValidationRule"  disabled="disabled" onchange="ValidationRuleChange(this);">' +
+			'      <option value="">(select a rule)</option>'+	
+			'      <option value="ValidationRule_MandatoryOptional">Mandatory/Optional</option>' +
+			'	   <option value="ValidationRule_FieldLength">Field length</option>' +
+			'	   <option value="ValidationRule_DataType">Data type</option>' +
+			'	   <option value="ValidationRule_DataFormat">Data format</option>' +
+			'	   <option value="ValidationRule_CustomRule_BIC">Custom rule: BIC</option>' +
+			'	   <option value="ValidationRule_CustomRule_123">Custom rule: 123</option>' +
+			'   </select></div>' +
+			'</div>'+
+			'<div class="card bg-light">'+	
+			'</div>' + 	
+			
+			'<div class="card bg-light">'+	
+			'<a href="#" onclick="removeLine(this);return false;">X Remove</a>'+
+			'</div>' + 	
+
+			'</div>';
+			
+			$("#validationRules").append(newRue);
+			}
+			
+		function addNewCleaningRule(){
+				
+			var newRue =
+			'<div class="validationRuleRow row card-deck">' +
+
+			'<div class="card text-white bg-primary">'+	
+			'  <div class="card-body"><select name="fieldName" onchange="CleaningFieldNameChange(this);">' +
+			'       <option value="">(select a field)</option>'+
+			'   	<option value="AccountNumber">Account Number</option>' +
+			'   	<option value="BankCode">Bank Code</option>' +
+			'   	<option value="BankCodeType">Bank Code Type</option>' +
+			'   	<option value="BranchCode">Branch Code</option>' +
+			'	   <option value="BranchCodeType">Branch Code Type</option>' +
+			'   </select></div>' + 	
+			'</div>'+
+			'<div class="card text-white bg-light">'+	
+			'   <div class="card-body"><select name="CleaningRule"  disabled="disabled" onchange="ValidationRuleChange(this);">' +
+			'      <option value="">(select a cleaning rule)</option>'+				
+			'	   <option value="CleaningRule_CharacterRemove">Remove character</option>' +
+			'	   <option value="CleaningRule_CharacterReplace">Replace character</option>' +
+			'	   <option value="CleaningRule_LeftRemove">Remove characters from begining</option>' +
+			'	   <option value="CleaningRule_RightRemove">Remove characters from the end</option>' +			
+			'   </select></div>' +
+			'</div>'+
+			'<div class="card bg-light">'+	
+			'</div>' + 	
+
+			'<div class="card bg-light">'+	
+			'<a href="#" onclick="removeLine(this);return false;">X Remove</a>'+
+			'</div>' + 	
+			'</div>';
+			
+			$("#cleaningRules").append(newRue);
+			}
+			
+			
+			function saveRule(element){
+			$(element).parent().parent().parent().toggleClass("bg-primary bg-light");
+			//$(element).parent().parent().parent().parent().parent().addClass("card border-primary");
+			
+			}
+			
+			
+			function getContent(fieldType){
+			var response= "";
+			switch(fieldType){
+				case "ValidationRule_MandatoryOptional":
+					response=
+						'   <div class="rule_setting card-body">' +
+						'      <label>Mandatory/Optional</h4>' + 
+						'      <div><input type="checkbox"  class="form-control form-control-sm"  /></div>'+
+						'<div class="col-sm-10">' + 
+						'<input type="button" class="form-control" value="Save" onclick="saveRule(this);" />'+
+						'</div>'+
+						'</div>';				
+					break;
+					
+				case "ValidationRule_FieldLength":
+					response=
+						'   <div class="form-group">' +
+						'      <label>Minimum length:' + 
+						'      <input type="text" class="form-control form-control-sm"/></label>'+	
+						'      <label>Maximum length:' + 
+						'      <input type="text" class="form-control form-control-sm"/></label>'+
+						'<div class="col-sm-10">' + 
+						'<input type="button" class="form-control" value="Save" onclick="saveRule(this);" />'+
+						'</div>'+
+						'</div>';		
+					break;
+					
+				case "ValidationRule_DataType":
+					response=
+						'<div class="form-group" name="ValidationRule_DataType">' +
+						'     <label>Data type:</label>'+
+						'      <select class="form-control form-control-sm">' +
+						'         <option>String</option>' +
+						'         <option>Number: Integer</option>' +
+						'         <option>Number: Float</option>' +
+						'      </select>' + 	
+						'<div class="col-sm-10">' + 
+						'<input type="button" class="form-control" value="Save" onclick="saveRule(this);" />'+
+						'</div>'+
+						'</div>';		
+					break;			
+					
+				case "ValidationRule_DataFormat":
+					response=
+						'<div class="form-group" name="ValidationRule_DataFormat">' +
+						'   <label>Data format:</label>'+	
+						'   <select class="form-control form-control-sm">' +
+						'      <option>String</option>' +
+						'      <option>Expression: numbers between 0-255 (^([01][0-9][0-9]|2[0-4][0-9]|25[0-5])$)</option>' +
+						'      <option>Expression: numbers between 1-999 (^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]))$</option>' +
+						'      <option>Expression: Email address (^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$)$</option>' +	
+						'      <option>Expression: Date format (^(19|20)\d\d([- /.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])$)$</option>' +		
+						'   </select>' + 		
+						'<div class="col-sm-10">' + 
+						'<input type="button" class="form-control" value="Save" onclick="saveRule(this);" />'+
+						'</div>'+
+						'</div>';			
+					break;
+					
+				case "ValidationRule_CustomRule_BIC":
+					response=
+						'   <div class="form-group" name="ValidationRule_CustomRule_BIC">' +
+						'      <label>Custom rule for BIC:</label>' + 
+						'      <input type="text" class="form-control form-control-sm"/>'+	
+						'<div class="col-sm-10">' + 
+						'<input type="button" class="form-control" value="Save" onclick="saveRule(this);" />'+
+						'</div>'+
+						'</div>';		
+					break;
+					
+				case "ValidationRule_CustomRule_123":
+					response=
+						'   <div class="form-group" name="ValidationRule_CustomRule_123">' +
+						'      <label>CustomRule_123</label>' + 
+						'      <input type="text" class="form-control form-control-sm" />'+
+						'<div class="col-sm-10">' + 
+						'<input type="button" class="form-control" value="Save" onclick="saveRule(this);" />'+
+						'</div>'+
+						'</div>';		
+					break;		
+
+			   	
+				case "CleaningRule_CharacterRemove":
+					response=
+						'   <div class="form-group">' +
+						'      <label>Minimum length:</label>' + 
+						'      <input type="text" class="form-control form-control-sm"/>'+	
+						'      <label>Maximum length:</label>' + 
+						'      <input type="text" class="form-control form-control-sm"/>'+
+						'<div class="col-sm-10">' + 
+						'<input type="button" class="form-control" value="Save" onclick="saveRule(this);" />'+
+						'</div>'+
+						'</div>';		
+					break;
+					
+					
+						case "CleaningRule_CharacterReplace":
+					response=
+						'   <div class="form-group">' +
+						'      <label>Minimum length:</label>' + 
+						'      <input type="text" class="form-control form-control-sm"/>'+	
+						'      <label>Maximum length:</label>' + 
+						'      <input type="text" class="form-control form-control-sm"/>'+
+						'<div class="col-sm-10">' + 
+						'<input type="button" class="form-control" value="Save" onclick="saveRule(this);" />'+
+						'</div>'+
+						'</div>';		
+					break;
+					
+					
+					
+						case "CleaningRule_LeftRemove":
+					response=
+						'   <div class="form-group">' +
+						'      <label>Minimum length:</label>' + 
+						'      <input type="text" class="form-control form-control-sm"/>'+	
+						'      <label>Maximum length:</label>' + 
+						'      <input type="text" class="form-control form-control-sm"/>'+
+						'<div class="col-sm-10">' + 
+						'<input type="button" class="form-control" value="Save" onclick="saveRule(this);" />'+
+						'</div>'+
+						'</div>';		
+					break;
+					
+					
+					
+						case "CleaningRule_RightRemove":
+					response=
+						'   <div class="form-group">' +
+						'      <label>Minimum length:</label>' + 
+						'      <input type="text" class="form-control form-control-sm"/>'+	
+						'      <label>Maximum length:</label>' + 
+						'      <input type="text" class="form-control form-control-sm"/>'+
+						'<div class="col-sm-10">' + 
+						'<input type="button" class="form-control" value="Save" onclick="saveRule(this);" />'+
+						'</div>'+
+						'</div>';		
+					break;
+					
+			
+				default: 
+					break;
+			}
+			
+			return response;
+			}
+			
+		$( document ).ready(function() {
+			
+			
+		});
+		</script>
+	</head>
+	<body>
+		<div class="outer_container">
+			<div class="container">					
+				<h1>Customisable Validator</h1>
+				<label for="customisable_vaidator_name">Name:</label>
+				<input type="text" id="customisable_vaidator_name" />
+				<hr />
+				<!-- <h2>Cleaning Rules</h2> -->
+				<!-- <input type="button" onclick="addNewCleaningRule();" value="Add new cleaning rule" /> -->
+				<!-- <div id="cleaningRules"> -->
+				<!-- </div>	 -->
+				
+				<h2>Validation Rules</h2>
+				<input type="button" onclick="addNewValidationRule();" value="Add new validation rule" />
+				<div id="validationRules">
+				</div>	
+				<hr />
+				<input type="button" onclick="SaveRule();" value="Save" />
+			<div>
+		</div>
+	</body>
+</html>
