@@ -26,7 +26,7 @@ GPP integrations have been implemented in specific gateways and platforms causin
 == Phases suggested
 To achieve goals of GPPaaS, few phases are suggested in this document. An incremental approach to create GPPaaS would enable product and technology to re-evaluate direction of the overall project
 
-Project: Segregate OneClick
+=== Project: Segregate OneClick
 To create a standalone 
 Tasks: 
 * Segregate DB
@@ -39,7 +39,7 @@ Deliverable: WPAP GPPs as a standalone product with no hard dependency on WPAP p
 Business ask/value: 
 * Ground work necessary for other phases
 
-Project: GPP Framework
+=== Project: GPP Framework
 Tasks: 
 * Migrate PaymentMethodAPI to .Net Core
 * Extend PaymentMethodAPI to cover GPP metadata
@@ -64,12 +64,13 @@ Tasks:
 * GPP Token generation service (reuse current functionality)
 * Turn GPP API to backend only feature
 
-Deliverable* faster and easier GPP integration, capacity planning for the future
+Deliverables:
+* faster and easier GPP integration, capacity planning for the future
 
 Business ask/value:
 * Same backend + shared front end= reduce cost + reduce time-to-market for GPP integrations
 
-Project: Generic GPP Integration
+=== Project: Generic GPP Integration
 Tasks:
 * Define generic user journey/transaction flow
 * Basic implementation
