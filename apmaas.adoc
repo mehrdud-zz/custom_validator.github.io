@@ -37,10 +37,12 @@ Tasks:
 Deliverable: WPAP GPPs as a standalone product with no hard dependency on WPAP products (except for infrastructure, development needs, design, support !!!  )
 
 Business ask/value: 
+
 * Ground work necessary for other phases
 
 === Project: GPP Framework
 Tasks: 
+
 * Migrate PaymentMethodAPI to .Net Core
 * Extend PaymentMethodAPI to cover GPP metadata
 * Extend PaymentMethodAPI for requ est marshalling to integration endpoints
@@ -48,9 +50,12 @@ Tasks:
 * Consumer and merchant configuration implementation (FXaaS pattern) 
 * Utilise OpenShift and SOP infrastructure 
 
-Deliverable: Gateway agnostic service to be used by Gateway 2.0 and all other internal consumers
+Deliverable: 
+
+* Gateway agnostic service to be used by Gateway 2.0 and all other internal consumers
 
 Business ask/value: 
+
 * Stand-alone, gateway agnostic GPP integration platform
 * Gateway 2.0 can use GPPs (see above) 
 * Standardise Worldpay business logic across all GPPs (e.g: same FX conversion policy, same token mechanism, same notification mechanism)
@@ -58,6 +63,7 @@ Business ask/value:
 
 === Project: Improve GPP Framework
 Tasks:
+
 * Shared payment pages for all Worldpay
 * Integrate WPG standalone services
 * Use validator service in conjunction with PaymentMethodAPI for GPP API request validation
@@ -65,9 +71,11 @@ Tasks:
 * Turn GPP API to backend only feature
 
 Deliverables:
+
 * faster and easier GPP integration, capacity planning for the future
 
 Business ask/value:
+
 * Same backend + shared front end= reduce cost + reduce time-to-market for GPP integrations
 
 === Project: Generic GPP Integration
@@ -76,9 +84,12 @@ Tasks:
 * Basic implementation
 * Extend to cover configurable settings
 
-Deliverable: Integration product/set of APIs for interested GPPs to integrate with Worldpay (heavy caveats in that statement)
+Deliverable: 
+
+* Integration product/set of APIs for interested GPPs to integrate with Worldpay (heavy caveats in that statement)
 
 Business ask/value:
+
 * Generic GPP integration so GPPs can integrate with Worldpay (!?) as long as we can get them to do it! 
 
 == Functional View
