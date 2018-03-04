@@ -1,0 +1,178 @@
+= High Level Design for GPP as a Service (ECB0000)
+:toc:
+:toclevels: 3
+
+ifdef::env-github[]
+:imglinkbase: https://github.devops.worldpay.local/raw/solution-architecture/HLD/master/ECB0000/img
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+
+TIP: Delete any sections & headings which are not relevant... as well as these tips.
+
+TIP: Large images should set and use 'imglinkbase' like so:      
+`image::img/CVV-capture.png[CVV Capture without 3DS, link="\{imglinkbase\}/CVV-capture.png"]`
+
+== Introduction
+
+Introduce project aims & objectives from requirements xref:ref-1[reference #1] etc ...
+
+GPP integrations have been implemented in specific gateways and platforms causing service coverage issues for heritage Worldpay merchants. This project aims to present a unified integration interface to internal Worldpay platforms with the aim of providing a gateway agnostic system.
+
+== Functional View
+=== Stateless APM integration
+APM integrations are perdominantly asynchronous. This means that a truly stateless service design with significant implementation cost is unlikley. Current implementation of Merchant API and OneClick relies on merchant/domain structure of WPAP. To remove this reliance, the new GPP API will rely on the calling consumer to provide merchant necessary merchant and shopper details in the APM call. This does not remove the dependency of onboarding merchant into WPAP treasury system, however this step can be automated. More detials in this section: (Mehrchant-onboarding)
+
+
+=== Endpoint marshalling
+All GPPs implemented in WPAP and standalone GPP integration services implemneted by WPG can be included in this project. All GPP requests received by t
+
+=== Transactions
+In current WPAP implementation, an APM transaction is tightly coupled with a money movement transaction. When an GPP transaction is completed, a money movement is immediately innititaed. A cross platform capability would only deal with a GPP transaction and processes a transaction lifecycle, notifying interested parties including backend treasury mechanism of a transaction's status change. The responsibility of how to handle a transaction status notificaiton is up to the consumer. In case of WPAP treasury mechanism, a GPP notification, would cause a money movement
+
+Example of money movement in a notification subscriber:
+ * Identify gateway specific merchant
+ * move money from-to account with a reference to GPP transaction
+ * mark internal transacitn as complete
+
+
+could initiate a transaction. 
+
+=== Notifications
+Notifications would be sent out on each transaction status change. 
+
+[source,json]
+{
+   "GPPNotificaion":{
+      "NotificaitonId":"33d7fe3c-5a2d-4c8e-83aa-18875baa5f1a",
+      "TokenId":"33d7fe3c-5a2d-4c8e-83aa-18875baa5f1a",
+      "TokenExpiryUtcTime":"33d7fe3c-5a2d-4c8e-83aa-18875baa5f1a",
+      "GPPReference":"33d7fe3c-5a2d-4c8e-83aa-18875baa5f1a",
+      "GPPTransactionStatus":"Paid",
+      "GPPCode":"200",
+      "GPPMessage":"",
+      "ConsumerId":"WPG",
+      "MerhcantId":"33d7fe3c-5a2d-4c8e-83aa-18875baa5f1a",
+      "ShopperDetails":"Mehrdud Ulfsark",
+      "FXBookingId":"33d7fe3c-5a2d-4c8e-83aa-18875baa5f1a",
+      "SourceCurrency":"GBP",
+      "TargetCurrency":"EUR",
+      "Value":"12.23",
+      "Country":"Netherlands",
+      "CountryCode":"ND",
+      "GPP":"iDeal"
+   }
+}
+ 
+Notificaitons in short term can utilise a dedicated WPAP Notificaiton Manager. In long term, notifiaitons should align with a Worldpay's strategic solution
+
+
+=== Merhcant Onboarding
+This is not a strict requirement of GPP API. If WPAP's existing treasury and settlement mechanism is used for GPP reconciliation as a short term tactical solution, then merchants need to be boarded in WPAP. This can be automated. 
+
+In long term, Worldpay's strategic solution would assume this resposiblity.
+
+
+=== Foreign Exchange Conversions
+The existing FXBooking functionality implemented in MerchantAPI calculates and guarantees FX value of a transaction. This functionality is different across WPAP and WPG. In a cross platform approach, GPP orchestrator should leverage FXaaS to get a guaranteed rate. In absence of such funcitonality, GPP API would rely on WPAP's FXaaS consumer settings and on WPAP treasury funciton to provide the guaranteed rate. 
+
+=== Payment Pages
+Long term target architecture is to remove gateway specific payment pages. To service existing platforms, payment pages service would need to submit merchant and consumer platform details to GPP API 
+
+=== Validation
+Use a standalone dedicated instance of WPAP new validation engine to validate requests on the point of entry
+
+=== Country Currency Validation
+Payment method API provides master data for APMs. 
+
+== Non-functional View
+
+== Business Process View
+=== Merchant Onboarding
+Valid options:
+* Manual BAU process
+* Automated process: Provide an API for automated merchant onboarding to provide minimum required information to board a merchant. Identify automatically onboarded merchant as consumer platform's merchant inside WPAP treasury mechanism. 
+* Gateway 2.0: Add WPAP treasury onboarding step to WPG automated onboarding step
+* Alternatively use WPG existing merchant... BAD BAD BAD
+
+=== Shopper Journey
+==== Synchronous
+Shopper presses checkout on merchant pages
+Shopper fills up the payment page
+Payment page submit a request to GPP API
+GPP API identifies consumer platform
+GPP API validates country currency combination
+GPP API validates provided information for a request to target GPP against validation engine
+GPP API requests FXBooking from WPAP... to be replaced with FXaaS Phase 2
+GPP API submits the request to GPP integration endpoint 
+GPP integration creates GPP token
+GPP API reutrns URL+token from GPP integration
+Shopper is redirected by payments pages to GPP redirectionURL 
+Shopper completes the payment
+Shopper is redirected to payment pages
+
+==== Asynchronos 
+OneClick Manager queries GPP token for pending tokens
+On status change send a notificaiton to listeners: consumer platform + WPAP treasury mechanism 
+On status=paid/returend stop polling
+
+==== Asynchronos
+* OneClick listener receives notification from GPP 
+* OneClick listener saves received notification 
+* OneClick Manager loops through received notificaions, updates relevant token status
+
+== Interface View
+
+== Design View
+
+== Infrastructure View
+
+== Deployment View
+
+== Operational View
+
+== Security View
+
+== Data View
+
+== Technology Selection
+
+== Build Engineering View
+
+== Architecture Justification
+
+== Constraints
+
+== Principles
+
+
+== Control
+
+=== References
+
+|===
+| ID | Title | Type | Reason
+
+| [[ref-1]]1 | http://teams.worldpay.local/sites/cats/fantastic-requirements.docx[PROJECT - requirements] | Word | Business Requirements
+|===
+
+=== Document Status
+
+|===
+|Date |Version |Author |Description
+
+| 2017-11-09| v 0.1| Dan Designer| Initial Version
+|===
+
+=== Decision Register
+
+A record of major design decisions recorded during the HLD life-cycle.
+
+|===
+|Date |Decision |Detail | Author
+
+|===
+
