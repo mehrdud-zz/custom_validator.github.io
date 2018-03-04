@@ -22,7 +22,64 @@ Introduce project aims & objectives from requirements xref:ref-1[reference #1] e
 
 GPP integrations have been implemented in specific gateways and platforms causing service coverage issues for heritage Worldpay merchants. This project aims to present a unified integration interface to internal Worldpay platforms with the aim of providing a gateway agnostic system.
 
+
+== Phases suggested
+Project: Segregate OneClick
+Tasks: 
+* Segregate DB
+* Remove dependency on EPACS database
+* Dedicated notification mechanism (setup a notification manager for OneClick)
+* Merchant auto-boarding for WPAP 
+
+Deliverable: WPAP GPPs as a standalone product with no hard dependency on WPAP products (except for infrastructure, development needs, design, support !!!  )
+
+Business ask/value: 
+* Ground work necessary for other phases
+
+Project: GPP Framework
+Tasks: 
+* Migrate PaymentMethodAPI to .Net Core
+* Extend PaymentMethodAPI to cover GPP metadata
+* Extend PaymentMethodAPI for requ est marshalling to integration endpoints
+* FXBooking implementation: using WPAP functionality for now… this will move into FXaaS phase 2
+* Consumer and merchant configuration implementation (FXaaS pattern) 
+* Utilise OpenShift and SOP infrastructure 
+
+Deliverable: Gateway agnostic service to be used by Gateway 2.0 and all other internal consumers
+
+Business ask/value: 
+* Stand-alone, gateway agnostic GPP integration platform
+* Gateway 2.0 can use GPPs (see above) 
+* Standardise Worldpay business logic across all APMs (e.g: same FX conversion policy, same token mechanism, same notification mechanism)
+* Opens the door to integrate with strategic merchant notification service
+
+=== Project: Improve GPP Framework
+Tasks:
+* Shared payment pages for all Worldpay
+* Integrate WPG standalone services
+* Use validator service in conjunction with PaymentMethodAPI for GPP API request validation
+* GPP Token generation service (reuse current functionality)
+* Turn GPP API to backend only feature
+
+Deliverable* faster and easier GPP integration, capacity planning for the future
+
+Business ask/value:
+* Same backend + shared front end= reduce cost + reduce time-to-market for GPP integrations
+
+Project: Generic GPP Integration
+Tasks:
+* Define generic user journey/transaction flow
+* Basic implementation
+* Extend to cover configurable settings
+
+Deliverable: Integration product/set of APIs for interested GPPs to integrate with Worldpay (heavy caveats in that statement)
+
+Business ask/value:
+* Generic GPP integration so GPPs can integrate with Worldpay (!?) as long as we can get them to do it! 
+
 == Functional View
+
+
 === Stateless APM integration
 APM integrations are predominantly asynchronous. This means that a truly stateless service design with significant implementation cost is unlikely. Current implementation of Merchant API and OneClick relies on merchant/domain structure of WPAP. To remove this reliance, the new GPP API will rely on the calling consumer to provide merchant necessary merchant and shopper details in the APM call. This does not remove the dependency of on-boarding merchant into WPAP treasury system, however this step can be automated. More details in this section: (Mehrchant-onboarding)
 
