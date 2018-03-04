@@ -24,7 +24,10 @@ GPP integrations have been implemented in specific gateways and platforms causin
 
 
 == Phases suggested
+To achieve goals of GPPaaS, few phases are suggested in this document. An incremental approach to create GPPaaS would enable product and technology to re-evaluate direction of the overall project
+
 Project: Segregate OneClick
+To create a standalone 
 Tasks: 
 * Segregate DB
 * Remove dependency on EPACS database
