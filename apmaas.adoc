@@ -180,7 +180,6 @@ OneClick Manager queries GPP token for pending tokens
 On status change send a notification to listeners: consumer platform + WPAP treasury mechanism 
 On status=paid/returned stop polling
 
-==== Asynchronous
 * OneClick listener receives notification from GPP 
 * OneClick listener saves received notification 
 * OneClick Manager loops through received notifications, updates relevant token status
