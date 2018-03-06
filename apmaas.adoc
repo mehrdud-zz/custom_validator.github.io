@@ -102,20 +102,26 @@ GPP integrations are predominantly asynchronous. This means that a truly statele
 === Endpoint marshalling
 All GPPs implemented in WPAP and standalone GPP integration services implemented by WPG can be included in this project. All GPP requests received by t
 
-=== Transactions
-In current WPAP implementation, a GPP transaction is tightly coupled with a money movement transaction. When an GPP transaction is completed, a money movement is immediately initiated. A cross platform capability would only deal with a GPP transaction and processes a transaction life cycle, notifying interested parties including back-end treasury mechanism of a transaction's status change. The responsibility of how to handle a transaction status notification is up to the consumer. In case of WPAP treasury mechanism, a GPP notification, would cause a money movement
+=== GPP Transactions
+In current WPAP implementation, a GPP transaction is tightly coupled with a WPAP money movement transaction. When an GPP transaction is completed, a money movement transaction is immediately initiated. A cross platform GPP capability would only process GPP transaction lifecycle, notifying interested parties including back-end treasury mechanism of a transaction's status change. The responsibility of how to handle a transaction status notification is up to the consumer. For example in case of WPAP treasury mechanism, a GPP transaction {"status": "completed"} notification would initiate a WPAP money movement tranaction.
 
-Example of money movement in a notification subscriber:
+A notification can be sent out to multiple subscribers. For example the initiating platform/gateway and treasury mechanism can both receive the same notificaiton.  
+
+More technical details on how to implement a dedicated notification mechanism including technology choices can be found in section???
+
+Example of how treasury service can handle/process a GPP notification:
  * Identify gateway specific merchant
  * move money from-to account with a reference to GPP transaction
  * mark internal transaction as complete
 
-
-could initiate a transaction. 
-
 === Notifications
-Notifications would be sent out on each transaction status change. 
+* Notifications would be sent out on each transaction status change.
+* Notifications would be group into channels specific to each platform (merchant?)
+* A consumer can subscribe to notifications channel dedicated to notifications initiated by itself
+* Treasury/backend mechanism can subscribe to notifications channel of any consumer 
+* External merchant notifications can be sent out using strategic Worldpay notification mechanism
 
+* Notification structure should comply with SOP RESTful API standards
 [source,json]
 {
    "GPPNotificaion":{
@@ -139,7 +145,7 @@ Notifications would be sent out on each transaction status change.
    }
 }
  
-Notifications in short term can utilise a dedicated WPAP Notification Manager. In long term, notifications should align with a Worldpay's strategic solution
+Notifications in short term can utilise a dedicated instance of WPAP Notification Manager. In long term, notifications should align with a Worldpay's strategic solution
 
 
 === Merchant On-boarding
